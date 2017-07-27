@@ -1,21 +1,25 @@
 var pageNo;
 var buttonClicked;
 var url;
-window.onscroll = function() {scrollFunction()};
-
-function scrollFunction() {
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        document.getElementById("scrollupBtn").style.display = "block";
-    } else {
-        document.getElementById("scrollupBtn").style.display = "none";
-    }
-}
+var hostURL='https://api.themoviedb.org/3/movie/';
 
 // When the user clicks on the button, scroll to the top of the document
-function topFunction() {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-}
+$(document).ready(function(){
+
+    $(window).scroll(function(){
+        if ($(this).scrollTop() > 100) {
+            $('.scrollup').fadeIn();
+        } else {
+            $('.scrollup').fadeOut();
+        }
+    });
+
+    $('.scrollup').click(function(){
+        $("html, body").animate({ scrollTop: 0 }, 600);
+        return false;
+    });
+
+});
 //function for nowshowing tab
 function nowshowing(elmnt)
 {
@@ -24,7 +28,7 @@ function nowshowing(elmnt)
 
     buttonClicked = "Now-Showing";
     pageNo=1;
-    url = 'https://api.themoviedb.org/3/movie/now_playing?api_key=fb5875eace5a99021e9a7dc4728b1a6b';
+    url = hostURL+'now_playing?api_key=fb5875eace5a99021e9a7dc4728b1a6b';
     clear();
     openMovies();
     setColors(elmnt, '#da6f59');
@@ -39,7 +43,7 @@ function upcoming(elmnt)
 
     buttonClicked = "Upcoming";
     pageNo=1;
-    url = 'https://api.themoviedb.org/3/movie/upcoming?api_key=fb5875eace5a99021e9a7dc4728b1a6b';
+    url = hostURL+'upcoming?api_key=fb5875eace5a99021e9a7dc4728b1a6b';
     clear();
     openMovies();
     setColors(elmnt, '#93cd8c');
@@ -52,7 +56,7 @@ function popular(elmnt)
 
     buttonClicked = "Popular";
     pageNo=1;
-    url = 'https://api.themoviedb.org/3/movie/popular?api_key=fb5875eace5a99021e9a7dc4728b1a6b';
+    url = hostURL+'popular?api_key=fb5875eace5a99021e9a7dc4728b1a6b';
     clear();
     openMovies();
     setColors(elmnt, '#8b95ff');
@@ -123,7 +127,7 @@ function openMovies() {
                 //property of contentDiv
                 contentDiv.className = "content";
                 contentDiv.setAttribute("class", "col-lg-9");
-                imageDiv.innerHTML = "<image src=" + "http://image.tmdb.org/t/p/w185/" + nowshowingData.results[i].poster_path + ">";
+                imageDiv.innerHTML = "<image src=" + "http://image.tmdb.org/t/p/w185/" + nowshowingData.results[i].poster_path +" onerror=\"this.src='noImageFound.jpg'\">";
                 contentDiv.innerHTML = "<span ><h1>" + nowshowingData.results[i].title + "</h1></span><br/><br/><p>" + nowshowingData.results[i].overview + "</p>";
                 //buttonMoreInfo
                 var buttonMoreInfo = document.createElement('input');
@@ -137,7 +141,7 @@ function openMovies() {
                 buttonMoreInfo.setAttribute("style", "float:right;\n" + "background-color:#3e8e41;color:#fff;border-radius:10px;");
                 //binding the elements in div
                 contentDiv.appendChild(buttonMoreInfo);
-                console.log(nowshowingData.page);
+                console.log(nowshowingData.results[i]);
                 row.appendChild(imageDiv);
                 row.appendChild(contentDiv);
             }
@@ -173,12 +177,17 @@ function moreInfo(data, i) {
         var modalDivBody = document.createElement('div');
         modalDivBody.setAttribute("class", "modal-body");
         modalDivBody.setAttribute("style", "background-color:white;");
-        modalDivBody.innerHTML = "<image src=" + "http://image.tmdb.org/t/p/w185/" + data.results[i].poster_path + ">\n" +
-            "<p><br/>Overview:" + data.results[i].overview + "</p>\n" +
-            "<p>Release Date:" + data.results[i].release_date + "</p>\n" +
-            "<p>Popularity:" + data.results[i].popularity + "</p>\n" +
-            "<p>Vote Count:" + data.results[i].vote_count + "</p>\n" +
-            "<p>Vote Average:" + data.results[i].vote_average + "</p>";
+        modalDivBody.innerHTML = "<image src=" + "http://image.tmdb.org/t/p/w185/" + data.results[i].backdrop_path + " onerror=\"this.src='noImageFound.jpg'\" width='400' height='200'>\n" +
+            "<p><br/><span style='    font-size: 1.294117647058824em;\n"  +
+            "             color: #03919d; '>Overview:</span>" + data.results[i].overview + "</p>\n" +
+            "<p><span style='    font-size: 1.294117647058824em;\n" +
+            "                color: #03919d; '>Release Date:</span>" + data.results[i].release_date + "</p>\n" +
+            "<p><span style='    font-size: 1.294117647058824em;\n"+
+            "                color: #03919d; '>Popularity:</span>" + data.results[i].popularity + "</p>\n" +
+            "<p><span style='    font-size: 1.294117647058824em;\n" +
+            "                color: #03919d; '>Vote Count:</span>" + data.results[i].vote_count + "</p>\n" +
+            "<p><span style='    font-size: 1.294117647058824em;\n" +
+            "    color: #03919d; '>Vote Average:</span>" + data.results[i].vote_average + "</p>";
         var modalDivFooter = document.createElement('div');
         modalDivFooter.setAttribute("class", "modal-footer");
         modalDivFooter.innerHTML = "<h2>...</h2>";
@@ -210,7 +219,7 @@ function latest(elmnt) {
         var src = document.getElementById("images");
         var newDiv = document.createElement('div');
         //pasring the json and getting the object
-        newDiv.innerHTML = "<image src=" + "http://image.tmdb.org/t/p/w185/" + latest.poster_path + ">\n" +
+        newDiv.innerHTML = "<image src=" + "http://image.tmdb.org/t/p/w185/" + latest.poster_path + " onerror=\"this.src='noImageFound.jpg'\">\n" +
             "<span ><h1>Title:" + latest.title + "</h1></span>\n" +
             "<p>Overview:" + latest.overview + "</p>\n" +
             "<p>Release Date:" + latest.release_date + "</p>\n" +
