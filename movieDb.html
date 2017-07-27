@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--Created by:Asween
+On:21/7/2017
+-->
+<head>
+
+    <meta charset="UTF-8">
+    <title>Movies App</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="movieDb.js"></script>
+
+    <style>
+        /*css for the top navigation menu*/
+        /*Style the tab buttons*/
+        .tablink
+        {
+            background-color: #555;
+            color:white;
+            float:left;
+            border:none;
+            outline:none;
+            cursor:pointer;
+            padding:14px 16px;
+            font-size:17px;
+            width:25%;
+        }
+        /*change background color of the buttins on hover*/
+        .tablink:hover
+        {
+            background-color: #777;
+        }
+        /* Set default styles for tab content */
+        .tabcontent {
+            color: white;
+            display: none;
+            padding: 50px;
+            text-align: center;
+        }
+        /* Style each tab content individually */
+        #Now-Showing {background-color: #da6f59;}
+        #Upcoming {background-color: #93cd8c;}
+        #Latest {background-color: #d6a1ce;}
+        #Popular {background-color: #8b95ff;}
+
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 80%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s
+        }
+
+        /* Add Animation */
+        @-webkit-keyframes animatetop {
+            from {top:-300px; opacity:0}
+            to {top:0; opacity:1}
+        }
+
+        @keyframes animatetop {
+            from {top:-300px; opacity:0}
+            to {top:0; opacity:1}
+        }
+
+        /* The Close Button */
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+
+        .modal-header {
+            padding: 2px 16px;
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .modal-body {padding: 2px 16px;}
+
+        .modal-footer {
+            padding: 2px 16px;
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        /*Scroll up  style*/
+        #scrollupBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: #3e8e41;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        #scrollupBtn:hover {
+            background-color: #555;
+        }
+        /*showmorebutton style*/
+        .showMoreBtn{
+            padding: 10px 20px;
+            font-size: 24px;
+            bottom:20px;
+            left:50%;
+            position:relative;
+            text-align: center;
+            cursor: pointer;
+            outline: none;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 9px #999;
+        }
+        .showMoreBtn:hover {background-color: #3e8e41}
+        .showMoreBtn:active{
+            background-color: #3e8e41;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+
+    </style>
+
+</head>
+<body>
+<!--Tab headers menu
+   Ref:https://www.w3schools.com/howto/howto_js_tab_header.asp
+   to create a top navigation menu-->
+    <div id="Now-Showing" class="tabcontent">
+        <h3>Now Showing</h3>
+        <p>Gives you the Now showing films.</p>
+    </div>
+    <div id="Upcoming" class="tabcontent">
+        <h3>Upcoming</h3>
+        <p>Gives you the Upcoming films.</p>
+    </div>
+
+    <div id="Latest" class="tabcontent">
+        <h3>Latest</h3>
+        <p>Gives you the Latest films.</p>
+    </div>
+
+    <div id="Popular" class="tabcontent">
+        <h3>Popular</h3>
+        <p>Gives you the All films.</p>
+    </div>
+    <button class="tablink" onclick="nowshowing(this)" id="alwaysOpen">Now Showing</button>
+    <button class="tablink" onclick="upcoming(this)">Upcoming</button>
+    <button class="tablink" onclick="latest(this)">Latest</button>
+    <button class="tablink" onclick="popular(this)">Popular</button>
+
+    <div class="container">
+
+        <div  class="display-block" style="padding-top: 10px; padding-bottom:10px;">
+
+            <div id="images" class="col-lg-3 "></div>
+            <div id="content" class="col-lg-9"></div>
+
+        </div>
+    </div>
+
+    <div id="movieBody">
+    </div>
+<br/>
+<br/>
+<input id="showMoreBtnId" type="button" value="Show More!!" class="showMoreBtn" onclick="showMore()">
+<br/>
+<br/>
+<button onclick="topFunction()" id="scrollupBtn" title="Go to top">Top</button>
+    <div id="modalBody" class="modal">
+    </div>
+
+    <script>
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("alwaysOpen").click();
+    </script>
+
+
+</body>
+</html>
